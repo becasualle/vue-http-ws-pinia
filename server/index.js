@@ -18,9 +18,24 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log(socket);
+  console.log('WEBSCOCKET CONNECTION SUCCESS'); //successfully logs
+
+  socket.emit('randomDataSent', randomString());
+  setInterval(() => {
+    socket.emit('randomDataSent', randomString());
+  }, 3 * 1000);
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
 server.listen(3001, () => {
   console.log('SERVER RUNNED');
 });
+
+function randomString() {
+  const msg = 'data part:';
+  const random = Math.floor(Math.random() * 100 + 1);
+  return msg + random;
+}
